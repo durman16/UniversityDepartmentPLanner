@@ -1,0 +1,18 @@
+{% extends 'accounts/main.html' %}
+
+{% block content %}
+
+<h2>Hoşgeldiniz!</h2>
+<br><br>
+<!-- <select name="universities" id="universities">
+    <option value="0" >Please select your university</option>
+    <option value="1">İTÜ</option>
+    <option value="2">İstinye Üniversitesi</option>
+    <option value="3">İstanbul Üniversitesi</option>
+    <option value="4">Boğaziçi Üniversitesi</option>
+  </select> -->
+  <h5>Üniversiteye göre bölüm tahminlerinizi bu siteden gerçekleştirebilirsiniz.</h5>
+  {% if not user.is_authenticated %}
+  <p>Önce <a href="/login"><strong>Giriş</strong></a> yapmalısınız.</p>
+  {% endif %}
+{% endblock %}

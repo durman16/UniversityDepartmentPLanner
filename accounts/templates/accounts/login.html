@@ -1,0 +1,107 @@
+{% extends 'accounts/main.html' %}
+
+{% block content %}
+
+<h2>Login</h2>
+<br><br>
+
+{% for message in messages %}
+        <div class="container-fluid p-0">
+            <div class="alert {{ message.tags }} alert-dismissible alert-dark" role="alert" style="text-align: center;" >
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="True">&times;</span>
+                </button>
+                {{ message }}
+            </div>
+        </div>
+    {% endfor %}
+
+<div style="display: flex;flex-direction: column;align-items: center;">
+<!-- Pills navs -->
+<ul class="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
+    <li class="nav-item" role="presentation">
+      <a class="nav-link active" id="tab-login" data-mdb-toggle="pill" href="#pills-login" role="tab"
+        aria-controls="pills-login" aria-selected="true">Giriş</a>
+    </li>
+    <li class="nav-item" role="presentation">
+      <a class="nav-link" id="tab-register" data-mdb-toggle="pill" href="#pills-register" role="tab"
+        aria-controls="pills-register" aria-selected="false">Kayıt</a>
+    </li>
+  </ul>
+  <!-- Pills navs -->
+  
+  <!-- Pills content -->
+  <div class="tab-content">
+    <div class="tab-pane fade show active" id="pills-login" role="tabpanel" aria-labelledby="tab-login">
+        <form action='/' method="POST">
+            {% csrf_token %}
+  
+        <!-- Email input -->
+        <div class="form-outline mb-4">
+          <input type="username" id="loginName" class="form-control" name="loginName"/>
+          <label class="form-label" for="loginName">Kullanıcı adı</label>
+        </div>
+        
+  
+        <!-- Password input -->
+        <div class="form-outline mb-4">
+          <input type="password" id="loginPassword" class="form-control" name="loginPassword" />
+          <label class="form-label" for="loginPassword">Password</label>
+        </div>
+  
+  
+        <!-- Submit button -->
+        <button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
+      </form>
+    </div>
+    <div class="tab-pane fade" id="pills-register" role="tabpanel" aria-labelledby="tab-register">
+        <form  action='/register' method="POST">
+            {% csrf_token %}
+        
+        <!-- University input -->
+        <!-- <div class="form-outline mb-4">
+            <input id="registerUniversity" class="form-control" />
+            <label class="form-label" for="registerUniversity">University</label>
+          </div> -->
+          
+          <!-- Email input -->
+          <div class="form-outline mb-4">
+              <input type="username" id="registerUsername" class="form-control" name="registerUsername" />
+              <label class="form-label" for="registerUsername">Kullanıcı adı</label>
+            </div>
+          <!-- Email input -->
+          <div class="form-outline mb-4">
+              <input type="email" id="registerEmail" class="form-control" name="registerEmail" />
+              <label class="form-label" for="registerEmail">Email</label>
+            </div>
+  
+        <!-- Password input -->
+        <div class="form-outline mb-4">
+            <input type="password" id="registerPassword" class="form-control" name="registerPassword" />
+            <label class="form-label" for="registerPassword">Password</label>
+        </div>
+        
+        <!-- Repeat Password input -->
+        <div class="form-outline mb-4">
+            <input type="password" id="registerRepeatPassword" class="form-control" name="registerRepeatPassword" />
+            <label class="form-label" for="registerRepeatPassword">Repeat password</label>
+        </div>
+        
+        <div class="form-outline mb-4">
+          <select id="registerUniversity"  class="form-select" aria-label="Select University" name="registerUniversity">
+              <option value="0">Select University</option>
+              <option value="İstanbul Teknik Üniversitesi">İstanbul Teknik Üniversitesi</option>
+              <option value="İstinye Üniversitesi">İstinye Üniversitesi</option>
+              <option value="İstanbul Üniversitesi">İstanbul Üniversitesi</option>
+          </select>
+        </div>
+        
+  
+        <!-- Submit button -->
+        <button type="submit" class="btn btn-primary btn-block mb-3">Sign up</button>
+      </form>
+    </div>
+  </div>
+  <!-- Pills content -->
+</div>
+{% endblock %}
