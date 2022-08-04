@@ -1,9 +1,9 @@
 import email
 from django.shortcuts import render
 from django.contrib import messages
-from django.contrib.auth import authenticate, logout, login
+from django.contrib.auth import authenticate, logout
 from django.contrib.auth.models import User
-
+from django.contrib.auth import login as auth_login
 
 # Create your views here.
 
@@ -11,13 +11,10 @@ def home(request):
     if request.method == 'POST':
         username = request.POST['loginName']
         password = request.POST.get('loginPassword')
-        user = authenticate(username=username, password=password)
-        print(username)
-        print(password)
-        print(user)
+        user = authenticate(request, username=username, password=password)
         if user is not None:
-            login(request)
-            return render(request, 'accounts/home.html')
+            auth_login(request, user)
+            return render(request, 'accounts/home.html', {})
         else:
             messages.error(request, "Kullanıcı adı veya Şifre hatalı!")
             return render(request, 'accounts/login.html', {})
