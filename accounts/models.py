@@ -6,6 +6,6 @@ class University(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
 
 class Account(AbstractUser):
-    university = models.ForeignKey(University, on_delete=models.SET_NULL, null=True, blank=True, related_name="user")
+    university = models.CharField(max_length=255, null=True, blank=True)
 
     USERNAME_FIELD = 'username'

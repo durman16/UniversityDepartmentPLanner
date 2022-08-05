@@ -6,6 +6,9 @@ urlpatterns = [
     path('register', views.register),
     path('login/', views.login),
     path('logout/', views.logout_view),
-    # path('register/', views.register),
+    path('dolulukOraniForm/', views.dolulukOraniForm, name="dolulukOraniForm"),
+    path('yeniprogramForm/', views.yeniprogramForm),
+    path('ogrenimucretiForm/', views.ogrenimucretiForm),
+    path('resultOgrenimUcreti', views.resultOgrenimUcreti),
     path('menu', views.menu),
 ]

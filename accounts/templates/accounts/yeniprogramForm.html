@@ -1,0 +1,65 @@
+{% extends 'accounts/main.html' %}
+
+{% block content %}
+<h3 style="text-align: center;">Yeni Program</h3>
+<div style="display: flex;justify-content: space-around;width: 100%;">
+    <form>
+        <!-- <div class="form-group">
+        <label for="exampleFormControlInput1">Bölüm</label>
+        <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Bölüm Seçiniz">
+        </div> -->
+        <div class="form-group">
+        <label for="exampleFormControlSelect1">Bölüm:</label>
+        <select class="form-control" id="bolum" name="bolum">
+        </select>
+        </div>
+        <!-- <div class="form-group">
+        <label for="exampleFormControlSelect2">Burs Seviyesi:</label>
+        <select class="form-control" id="burs">
+        </select>
+        </div> -->
+        <!-- <div class="form-group">
+        <label for="exampleFormControlSelect2">Example multiple select</label>
+        <select multiple class="form-control" id="exampleFormControlSelect2">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+        </select>
+        </div> -->
+        <!-- <div class="form-group">
+        <label for="exampleFormControlTextarea1">Example textarea</label>
+        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+        </div> -->
+        <button type="submit" class="btn">Sonuçları Al</button>
+    </form>
+</div>
+
+<script>
+    var bölüm_list = []
+    var burs_list = []
+      $.getJSON("/static/json/data_2021.json", function(json) {
+          var bolum = "<option value='0' selected>Lütfen Bölüm Seçiniz</option>";
+          var burs = "<option value='0' selected>Lütfen Burs Seçiniz</option>";
+          json.forEach((item) => {
+            console.log(item[0])
+            console.log(item[0].split('('))
+            console.log(item[0].split('(')[0])
+            var bolum_split = item[0].split('(')[0]
+            var bolum_split = item[0]
+            if(!bölüm_list.includes(bolum_split)){
+                bolum += `<option value="${bolum_split}">${bolum_split}</option>`;
+                bölüm_list.push(bolum_split);
+              }
+              if(!burs_list.includes(item[3])){
+                burs += `<option value="${item[3]}">${item[3]}</option>`;
+                burs_list.push(item[3]);
+              }
+          });
+          $(`#bolum`).html(bolum);
+          $(`#burs`).html(burs);
+      });
+    //   console.log("burs_list: ",burs_list)
+  </script>
+{% endblock %}

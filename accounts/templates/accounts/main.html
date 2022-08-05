@@ -21,6 +21,13 @@
         rel="stylesheet"
         />
         <link rel="stylesheet" type="text/css" href="{% static '/css/main.css' %}">
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script src="https://unpkg.com/ag-grid-community/dist/ag-grid-community.min.noStyle.js"></script>
+        <link rel="stylesheet"
+     href="https://unpkg.com/ag-grid-community/styles/ag-grid.css"/>
+   <!-- Include the theme CSS, only need to import the theme you are going to use -->
+   <link rel="stylesheet"
+     href="https://unpkg.com/ag-grid-community/styles/ag-theme-alpine.css"/>
     </head>
     <body>
         <h1>Üniversite Bölüm Planlaması</h1>
@@ -31,6 +38,7 @@
         {% endblock %}
     </body>
     <!-- MDB -->
+    
 <script
 type="text/javascript"
 src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.4.0/mdb.min.js"

@@ -104,4 +104,17 @@
   </div>
   <!-- Pills content -->
 </div>
+
+<script>
+  var all_uni = []
+    $.getJSON("/static/json/data_2021.json", function(json) {
+        var unis = "<option value='0' selected>Lütfen Üniversite Seçiniz</option>";
+        json.forEach((item) => {
+            unis += `<option value="${item[2]}">${item[2]}</option>`;
+            // all_uni.push(item[2]);
+        });
+        $(`#registerUniversity`).html(unis);
+    });
+    // console.log("all_the_cities: ",all_uni)
+</script>
 {% endblock %}
