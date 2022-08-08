@@ -4,7 +4,7 @@ import json
 conn = db.connect("data.db")
 c = conn.cursor()
 universite_list = []
-rows = c.execute("select * from datas where year = '2021' group by universite order by universite").fetchall()
+rows = c.execute("select * from datas where year = '2021'").fetchall()
 for r in rows:
     print(r)
     universite_list.append(r)

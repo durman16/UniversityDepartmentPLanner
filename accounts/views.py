@@ -69,17 +69,19 @@ def menu(request):
             return render(request, 'accounts/login.html', {})
     return render(request, 'accounts/menu.html')
 def dolulukOraniForm(request):
+    user = request.user
+    university = request.user.university
     if request.method == 'POST':
         universite = request.user.university
         bolum = request.POST["bolum"]
-        # print("bolum: ",bolum)
-        # print("universite: ",universite)
+        print("bolum: ",bolum)
+        print("universite: ",universite)
         # print(data1)
         data1_dict = [x for x in data1 if x[0] == bolum and x[2] == universite]
         print(data1_dict)
         return render(request, 'accounts/resultOgrenimUcreti.html')
     print("GET")
-    return render(request, 'accounts/dolulukOraniForm.html')
+    return render(request, 'accounts/dolulukOraniForm.html', {"user":user, "university": university})
 def yeniprogramForm(request):
     if request.method == 'POST':
         user = request.user

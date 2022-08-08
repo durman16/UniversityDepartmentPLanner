@@ -44,19 +44,28 @@
       $.getJSON("/static/json/data_2021.json", function(json) {
           var bolum = "<option value='0' selected>Lütfen Bölüm Seçiniz</option>";
           var burs = "<option value='0' selected>Lütfen Burs Seçiniz</option>";
+          // console.log(json)
           json.forEach((item) => {
-            console.log(item[0])
-            console.log(item[0].split('('))
-            console.log(item[0].split('(')[0])
-            var bolum_split = item[0].split('(')[0]
-            var bolum_split = item[0]
-            if(!bölüm_list.includes(bolum_split)){
-                bolum += `<option value="${bolum_split}">${bolum_split}</option>`;
-                bölüm_list.push(bolum_split);
-              }
-              if(!burs_list.includes(item[3])){
-                burs += `<option value="${item[3]}">${item[3]}</option>`;
-                burs_list.push(item[3]);
+            // console.log(item[2])
+            user = "{{user}}"
+            university = "{{university}}"
+            // console.log(user)
+            // console.log(university)
+            if(item[2] == university){
+              console.log(item[2])
+              // console.log(item[0])
+              // console.log(item[0].split('('))
+              // console.log(item[0].split('(')[0])
+              var bolum_split = item[0].split('(')[0]
+              var bolum_split = item[0]
+              if(!bölüm_list.includes(bolum_split)){
+                  bolum += `<option value="${bolum_split}">${bolum_split}</option>`;
+                  bölüm_list.push(bolum_split);
+                }
+                if(!burs_list.includes(item[3])){
+                  burs += `<option value="${item[3]}">${item[3]}</option>`;
+                  burs_list.push(item[3]);
+                }
               }
           });
           $(`#bolum`).html(bolum);
