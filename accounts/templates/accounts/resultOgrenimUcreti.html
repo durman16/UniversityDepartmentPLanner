@@ -20,20 +20,20 @@
     }
     </style>
 
-<h2>HTML Table</h2>
+<h2>Doluluk oranı tahminleri</h2>
 
 <table>
   <tr>
-    <th>Company</th>
-    <th>Contact</th>
-    <th>Country</th>
+    <th>Bölüm</th>
+    <th>Üniversite</th>
+    <th>Doluluk Oranı</th>
   </tr>
   <tr>
-    <td>Alfreds Futterkiste</td>
-    <td>Maria Anders</td>
-    <td>Germany</td>
+    <td>{{bolum}}</td>
+    <td>{{universite}}</td>
+    <td>{{result}}</td>
   </tr>
-  <tr>
+  {% comment %} <tr>
     <td>Centro comercial Moctezuma</td>
     <td>Francisco Chang</td>
     <td>Mexico</td>
@@ -57,7 +57,7 @@
     <td>Magazzini Alimentari Riuniti</td>
     <td>Giovanni Rovelli</td>
     <td>Italy</td>
-  </tr>
+  </tr> {% endcomment %}
 </table>
 
 {% endblock %}

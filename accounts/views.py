@@ -6,6 +6,10 @@ from django.contrib.auth import login as auth_login
 from .models import Account
 import json
 import pickle
+from .predict import predict
+
+
+
 
 model = pickle.load(open('accounts/model.pkl', 'rb'))
 json_data = open('accounts/data_2021.json', encoding='utf-8')  
@@ -79,7 +83,9 @@ def dolulukOraniForm(request):
         # print(data1)
         data1_dict = [x for x in data1 if x[0] == bolum and x[2] == universite]
         print(data1_dict)
-        return render(request, 'accounts/resultOgrenimUcreti.html')
+        try: result = predict(bolum, universite)
+        except: result = "Bulunamadı"
+        return render(request, 'accounts/resultOgrenimUcreti.html', {'bolum':bolum, 'universite':universite, 'result':result})
     print("GET")
     return render(request, 'accounts/dolulukOraniForm.html', {"user":user, "university": university})
 def yeniprogramForm(request):
