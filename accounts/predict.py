@@ -42,6 +42,7 @@ X = pd.DataFrame(X).drop(['Oran'], axis=1)
 X = pd.DataFrame(X).drop(['year'], axis=1)
 
 def predict(bolum_name, uni_name):
+    bolum_name = bolum_name.replace('%','')
     print(bolum_name)
     print(uni_name)
     bolum = X.loc[(X["bolum_" +bolum_name] == 1) & (X['universite_'+uni_name]== 1)]
