@@ -16,7 +16,7 @@ import pandas as pd
 from joblib import load
 import numpy as np
 
-rnd = load('accounts/rnd.joblib')
+rnd = load('accounts/rnd_demand.joblib')
 
 
 # train_set = pd.read_excel('dataframe.xlsx')
