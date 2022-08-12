@@ -15,6 +15,8 @@ import pandas as pd
 # from sklearn.preprocessing import OneHotEncoder
 from joblib import load
 import numpy as np
+import warnings
+warnings.filterwarnings('ignore')
 
 rnd = load('accounts/rnd_demand.joblib')
 
