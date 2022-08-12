@@ -25,9 +25,9 @@ df= pd.read_excel('accounts/veriseti.xlsx')
 df_year = df[(df["year"] == 2021) | (df["year"] == 2020)]
 # df_year = df[(df["year"] == 2021)]
 # print(df_year["year"])
-onehot = df[["bolum", "fakulte", "universite", "burs","sehir", "dil"]]
+onehot = df_year[["bolum", "fakulte", "universite", "burs","sehir", "dil"]]
 onehot_df = pd.get_dummies(onehot, prefix_sep="_")
-other_df = df.iloc[:,6:]
+other_df = df_year.iloc[:,6:]
 other_df = pd.DataFrame(other_df).drop(['Oran'], axis=1)
 X_pred = pd.concat([onehot_df, other_df], axis=1) 
 X_pred = X_pred[(X_pred["year"] == 2021)]
