@@ -35,7 +35,7 @@ y_pre = X_pred["demand"].values.reshape(-1,1)
 X_pred = pd.DataFrame(X_pred).drop(['demand'], axis=1)
 X_pred = pd.DataFrame(X_pred).drop(['year'], axis=1)
 
-def predict(depart, uni):
+def predict_demand(depart, uni):
     # bolum = X_pred.loc[(X_pred["bolum_İç Mimarlık ve Çevre Tasarımı (50 İndirimli)"] == 1) & (X_pred['universite_İSTANBUL SABAHATTİN ZAİM ÜNİVERSİTESİ']== 1)]
     filter = X_pred.loc[(X_pred["bolum_"+ depart] == 1) & (X_pred['universite_'+ uni]== 1)]
     # print(filter.index)

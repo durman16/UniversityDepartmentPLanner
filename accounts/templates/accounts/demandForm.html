@@ -1,9 +1,9 @@
 {% extends 'accounts/main.html' %}
 
 {% block content %}
-<h3 style="text-align: center;">Öğrenim Ücreti</h3>
+<h3 style="text-align: center;">Bölüm Tercih Eden Öğrenci Tahmini</h3>
 <div style="display: flex;justify-content: space-around;width: 100%;">
-    <form action="{% url 'dolulukOraniForm' %}" method="POST">
+    <form action="{% url 'demandForm' %}" method="POST">
         {% csrf_token %}
         <!-- <div class="form-group">
         <label for="exampleFormControlInput1">Bölüm</label>
@@ -14,11 +14,11 @@
         <select class="form-control" id="bolum" name="bolum">
         </select>
         </div>
-        <div class="form-group">
+        {% comment %} <div class="form-group">
         <label for="exampleFormControlSelect2">Burs Seviyesi:</label>
         <select class="form-control" id="burs">
         </select>
-        </div>
+        </div> {% endcomment %}
         <!-- <div class="form-group">
         <label for="exampleFormControlSelect2">Example multiple select</label>
         <select multiple class="form-control" id="exampleFormControlSelect2">
@@ -39,15 +39,23 @@
 
 
 <script>
-    var bölüm_list = []
-    var burs_list = []
-      $.getJSON("/static/json/data_2021.json", function(json) {
-          var bolum = "<option value='0' selected>Lütfen Bölüm Seçiniz</option>";
-          var burs = "<option value='0' selected>Lütfen Burs Seçiniz</option>";
-          json.forEach((item) => {
-            console.log(item[0])
-            console.log(item[0].split('('))
-            console.log(item[0].split('(')[0])
+  var bölüm_list = []
+  var burs_list = []
+    $.getJSON("/static/json/data_2021.json", function(json) {
+        var bolum = "<option value='0' selected>Lütfen Bölüm Seçiniz</option>";
+        var burs = "<option value='0' selected>Lütfen Burs Seçiniz</option>";
+        // console.log(json)
+        json.forEach((item) => {
+          // console.log(item[2])
+          user = "{{user}}"
+          university = "{{university}}"
+          // console.log(user)
+          // console.log(university)
+          if(item[2] == university){
+            console.log(item[2])
+            // console.log(item[0])
+            // console.log(item[0].split('('))
+            // console.log(item[0].split('(')[0])
             var bolum_split = item[0].split('(')[0]
             var bolum_split = item[0]
             if(!bölüm_list.includes(bolum_split)){
@@ -58,10 +66,11 @@
                 burs += `<option value="${item[3]}">${item[3]}</option>`;
                 burs_list.push(item[3]);
               }
-          });
-          $(`#bolum`).html(bolum);
-          $(`#burs`).html(burs);
-      });
-    //   console.log("burs_list: ",burs_list)
-  </script>
+            }
+        });
+        $(`#bolum`).html(bolum);
+        $(`#burs`).html(burs);
+    });
+  //   console.log("burs_list: ",burs_list)
+</script>
 {% endblock %}

@@ -6,7 +6,8 @@ from django.contrib.auth import login as auth_login
 from .models import Account
 import json
 import pickle
-from .predict import predict
+from .predict import predict_capacity
+from .demand import predict_demand
 
 
 
@@ -83,7 +84,7 @@ def dolulukOraniForm(request):
         # print(data1)
         data1_dict = [x for x in data1 if x[0] == bolum and x[2] == universite]
         print(data1_dict)
-        try: result = predict(bolum, universite)
+        try: result = predict_capacity(bolum, universite)
         except: result = "Bulunamadı"
         return render(request, 'accounts/resultOgrenimUcreti.html', {'bolum':bolum, 'universite':universite, 'result':result})
     print("GET")
@@ -92,11 +93,25 @@ def yeniprogramForm(request):
     if request.method == 'POST':
         user = request.user
     return render(request, 'accounts/yeniprogramForm.html')
-def ogrenimucretiForm(request):
+    
+def demandForm(request):
+    user = request.user
+    university = request.user.university
     if request.method == 'POST':
-        user = request.user
-        return render(request, 'accounts/resultOgrenimUcreti.html')
-    return render(request, 'accounts/ogrenimucretiForm.html')
+        universite = request.user.university
+        bolum = request.POST["bolum"]
+        print("bolum: ",bolum)
+        print("universite: ",universite)
+        # print(data1)
+        data1_dict = [x for x in data1 if x[0] == bolum and x[2] == universite]
+        print(data1_dict)
+        try: result = predict_demand(bolum, universite)
+        except: result = "Bulunamadı"
+        return render(request, 'accounts/resultDemand.html', {'bolum':bolum, 'universite':universite, 'result':result})
+    print("GET")
+    return render(request, 'accounts/demandForm.html', {"user":user, "university": university})
+
+
 def resultOgrenimUcreti(request):
     if request.method == 'POST':
         user = request.user

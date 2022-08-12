@@ -41,11 +41,12 @@ y = X["Oran"].values.reshape(-1,1)
 X = pd.DataFrame(X).drop(['Oran'], axis=1)
 X = pd.DataFrame(X).drop(['year'], axis=1)
 
-def predict(bolum_name, uni_name):
+def predict_capacity(bolum_name, uni_name):
     bolum_name = bolum_name.replace('%','')
     print(bolum_name)
     print(uni_name)
     bolum = X.loc[(X["bolum_" +bolum_name] == 1) & (X['universite_'+uni_name]== 1)]
+    print(bolum)
     # print(bolum.index)
     # print("-----------------")
     # print(X.filter(items = [15591], axis=0)["bolum_Yapay Zeka ve Veri Mühendisliği (İngilizce)"])

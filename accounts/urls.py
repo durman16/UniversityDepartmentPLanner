@@ -8,7 +8,7 @@ urlpatterns = [
     path('logout/', views.logout_view),
     path('dolulukOraniForm/', views.dolulukOraniForm, name="dolulukOraniForm"),
     path('yeniprogramForm/', views.yeniprogramForm),
-    path('ogrenimucretiForm/', views.ogrenimucretiForm),
+    path('demandForm/', views.demandForm, name="demandForm"),
     path('resultOgrenimUcreti', views.resultOgrenimUcreti),
     path('menu', views.menu),
 ]
