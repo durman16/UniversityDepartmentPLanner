@@ -6,8 +6,8 @@ from django.contrib.auth import login as auth_login
 from .models import Account
 import json
 import pickle
-from .predict import predict_capacity
-from .demand import predict_demand
+# from .predict import predict_capacity
+# from .demand import predict_demand
 
 
 
@@ -43,14 +43,17 @@ def register(request):
         university = request.POST.get('registerUniversity')
         password = request.POST['registerPassword']
         password2 = request.POST['registerRepeatPassword']
-        # print("username: ",username)
-        # print("email: ",email)
-        # print("university: ",university)
-        # print("password: ",password)
+        ucret = request.POST['registerUcret']
+        print("username: ",username)
+        print("email: ",email)
+        print("university: ",university)
+        print("password: ",password)
+        print("password: ",ucret)
         if password == password2:
             if not Account.objects.filter(username=username).exists():
                 user = Account.objects.create_user(username, email, password)
                 user.university = university
+                user.ucret = ucret
                 user.save()
                 messages.success(request, "Kullanıcı oluşturuldu!")
             else:
@@ -73,6 +76,7 @@ def menu(request):
             messages.error(request, "Kullanıcı adı veya Şifre hatalı!")
             return render(request, 'accounts/login.html', {})
     return render(request, 'accounts/menu.html')
+
 def dolulukOraniForm(request):
     user = request.user
     university = request.user.university
@@ -80,20 +84,93 @@ def dolulukOraniForm(request):
         universite = request.user.university
         bolum = request.POST["bolum"]
         print("bolum: ",bolum)
+        fakulte = request.POST["fakulte"]
+        print("fakulte: ",fakulte)
+        print("bolum: ",bolum)
         print("universite: ",universite)
         # print(data1)
         data1_dict = [x for x in data1 if x[0] == bolum and x[2] == universite]
         print(data1_dict)
         try: result = predict_capacity(bolum, universite)
         except: result = "Bulunamadı"
+        
         result = int(100*result)
-        return render(request, 'accounts/resultOgrenimUcreti.html', {'bolum':bolum, 'universite':universite, 'result':result})
+        return render(request, 'accounts/resultDolulukOrani.html', {'bolum':bolum, 'fakulte':fakulte, 'universite':universite, 'result':result})
     print("GET")
     return render(request, 'accounts/dolulukOraniForm.html', {"user":user, "university": university})
-def yeniprogramForm(request):
+
+def yeniBolumForm(request):
+    user = request.user
+    university = request.user.university
     if request.method == 'POST':
-        user = request.user
-    return render(request, 'accounts/yeniprogramForm.html')
+        fakulte = request.POST["fakulte"]
+        kontenjan = request.POST["kontenjan"]
+        kriter = request.POST["kriter"]
+        top_n = request.POST["top-n"]
+        print("fakulte: ",fakulte)
+        print("kontenjan: ",kontenjan)
+        print("kriter: ",kriter)
+        print("top_n: ",top_n)
+        # return render(request, 'accounts/resultYeniBolum.html', {'bolum':bolum, 'universite':universite, 'result':result})
+    print("GET")
+    return render(request, 'accounts/yeniBolumForm.html', {"user":user, "university": university})
+
+
+def istatistikForm(request):
+    user = request.user
+    university = request.user.university
+    if request.method == 'POST':
+        fakulte = request.POST["fakulte"]
+        bolum = request.POST["bolum"]
+        kontenjan = request.POST["kontenjan"]
+        istatistik = request.POST["istatistik"]
+        print("fakulte: ",fakulte)
+        print("bolum: ",bolum)
+        print("kontenjan: ",kontenjan)
+        print("istatistik: ",istatistik)
+        # return render(request, 'accounts/resultYeniBolum.html', {'bolum':bolum, 'universite':universite, 'result':result})
+    print("GET")
+    return render(request, 'accounts/istatistikForm.html', {"user":user, "university": university})
+
+
+def yerlestirmeForm(request):
+    user = request.user
+    university = request.user.university
+    if request.method == 'POST':
+        fakulte = request.POST["fakulte"]
+        bolum = request.POST["bolum"]
+        print("fakulte: ",fakulte)
+        print("bolum: ",bolum)
+        # return render(request, 'accounts/resultYeniBolum.html', {'bolum':bolum, 'universite':universite, 'result':result})
+    print("GET")
+    return render(request, 'accounts/yerlestirmeForm.html', {"user":user, "university": university})
+
+
+def kontenjanForm(request):
+    user = request.user
+    university = request.user.university
+    if request.method == 'POST':
+        fakulte = request.POST["fakulte"]
+        bolum = request.POST["bolum"]
+        tabanPuani = request.POST["tabanPuani"]
+        yerlesme = request.POST["yerlesme"]
+        print("fakulte: ",fakulte)
+        print("bolum: ",bolum)
+        print("tabanPuani: ",tabanPuani)
+        print("yerlesme: ",yerlesme)
+        # return render(request, 'accounts/resultYeniBolum.html', {'bolum':bolum, 'universite':universite, 'result':result})
+    print("GET")
+    return render(request, 'accounts/kontenjanForm.html', {"user":user, "university": university})
+
+
+
+
+
+
+
+
+
+
     
 def demandForm(request):
     user = request.user
@@ -113,8 +190,4 @@ def demandForm(request):
     return render(request, 'accounts/demandForm.html', {"user":user, "university": university})
 
 
-def resultOgrenimUcreti(request):
-    if request.method == 'POST':
-        user = request.user
-    return render(request, 'accounts/resultOgrenimUcreti.html')
 

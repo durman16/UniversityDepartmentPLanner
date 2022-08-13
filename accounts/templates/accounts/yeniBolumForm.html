@@ -1,0 +1,106 @@
+{% extends 'accounts/main.html' %}
+
+{% block content %}
+<h3 style="text-align: center;">Top-N Yeni Bölüm Önerileri</h3>
+<p style="text-align: center;">{{ request.user.university}}</p>
+<div style="display: flex;justify-content: space-around;width: 100%;">
+    <form action="{% url 'yeniBolumForm' %}" method="POST">
+        {% csrf_token %}
+        <!-- <div class="form-group">
+        <label for="exampleFormControlInput1">Bölüm</label>
+        <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Bölüm Seçiniz">
+        </div> -->
+        <div class="form-group">
+        <label for="exampleFormControlSelect1">Fakülte:</label>
+        <select class="form-control" id="fakulte" name="fakulte">
+        </select>
+        </div>
+        <div class="form-group">
+        <label for="exampleFormControlSelect5">Kontenjan:</label>
+        <input type="number" id="kontenjan" name="kontenjan" min="1">
+        </div>
+        <div class="form-group">
+        <label for="exampleFormControlSelect2">Bursluluk Durumu:</label>
+        <select class="form-control" id="burs" name="burs">
+        </select>
+        </div>
+        <div class="form-group">
+        <label for="exampleFormControlSelect3">Kriter:</label>
+        <select class="form-control" id="kriter" name="kriter">
+            <option value='0' selected>Lütfen Kriter Seçiniz</option>
+            <option value='1'>En yüksek yerleştirmeye göre</option>
+            <option value='2' >En yüksek gelire göre</option>
+            <option value='3' >En yüksek taban puanına göre</option>
+        </select>
+        </div>
+        <div class="form-group">
+        <label for="exampleFormControlSelect4">Kaç tane:</label>
+        <select class="form-control" id="top-n" name="top-n">
+            <option value='1'>5</option>
+            <option value='2' >10</option>
+            <option value='3' >15</option>
+            <option value='4' >20</option>
+        </select>
+        </div>
+        <!-- <div class="form-group">
+        <label for="exampleFormControlSelect2">Burs Seviyesi:</label>
+        <select class="form-control" id="burs">
+        </select>
+        </div> -->
+        <!-- <div class="form-group">
+        <label for="exampleFormControlSelect2">Example multiple select</label>
+        <select multiple class="form-control" id="exampleFormControlSelect2">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+        </select>
+        </div> -->
+        <!-- <div class="form-group">
+        <label for="exampleFormControlTextarea1">Example textarea</label>
+        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+        </div> -->
+        <!-- <input class="btn btn-primary" type="submit" value="Sonuçları al"> -->
+        <button type="submit" class="btn">Sonuçları Al</button>
+    </form>
+</div>
+
+<script>
+    var fakulte_list = []
+    var burs_list = []
+    user = "{{user}}"
+    university = "{{university}}"
+    console.log(user)
+    console.log(university)
+    $.getJSON("/static/json/data_2021.json", function(json) {
+        var fakulte = "<option value='0' selected>Lütfen Fakülte Seçiniz</option>";
+        var burs = "<option value='0' selected>Lütfen Burs Seçiniz</option>";
+        // console.log(json)
+        json.forEach((item) => {
+            // console.log(item[2])
+            // console.log(user)
+            // console.log(university)
+            if(true){
+              //console.log(item)
+              // console.log(item[0])
+              // console.log(item[0].split('('))
+              // console.log(item[0].split('(')[0])
+              var fakulte_item = item[1]
+              //console.log(fakulte_item)
+              if(!fakulte_list.includes(fakulte_item)){
+                    fakulte += `<option value="${fakulte_item}">${fakulte_item}</option>`;
+                    fakulte_list.push(fakulte_item);
+                }
+                if(!burs_list.includes(item[3])){
+                  burs += `<option value="${item[3]}">${item[3]}</option>`;
+                  burs_list.push(item[3]);
+                }
+              }
+          });
+          $(`#fakulte`).html(fakulte);
+          $(`#burs`).html(burs);
+      });
+    //   console.log("burs_list: ",burs_list)
+  </script>
+{% endblock %}

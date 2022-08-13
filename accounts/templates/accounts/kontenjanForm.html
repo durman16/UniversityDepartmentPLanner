@@ -1,0 +1,113 @@
+{% extends 'accounts/main.html' %}
+
+{% block content %}
+<h3 style="text-align: center;">En İyi Kontenjan Önerisi</h3>
+<p style="text-align: center;">{{ request.user.university}}</p>
+<div style="display: flex;justify-content: space-around;width: 100%;">
+    <form action="{% url 'kontenjanForm' %}" method="POST">
+        {% csrf_token %}
+        <!-- <div class="form-group">
+        <label for="exampleFormControlInput1">Bölüm</label>
+        <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Bölüm Seçiniz">
+        </div> -->
+        <div class="form-group">
+        <label for="exampleFormControlSelect1">Fakülte:</label>
+        <select class="form-control" id="fakulte" name="fakulte">
+        </select>
+        </div>
+        <div class="form-group">
+        <label for="exampleFormControlSelect3">Bölüm:</label>
+        <select class="form-control" id="bolum" name="bolum">
+          <option value='0' selected>Lütfen Bölüm Seçiniz</option>
+        </select>
+        </div>
+        {% comment %} <div class="form-group">
+            <label for="exampleFormControlSelect2">Bursluluk Durumu:</label>
+            <select class="form-control" id="burs" name="burs">
+              <option value='0' selected>Lütfen Burs Seçiniz</option>
+            </select>
+        </div> {% endcomment %}
+        <div class="form-group">
+        <label for="exampleFormControlSelect2">Minimum Taban Puan:</label>
+        <input type="number" id="tabanPuani" name="tabanPuani" min="1">
+        </div>
+        <div class="form-group">
+        <label for="exampleFormControlSelect2">Minimum Yerleşme Oranı(%):</label>
+        <input type="number" id="yerlesme" name="yerlesme" min="0">
+        </div>
+        {% comment %} <div class="form-group">
+        <label for="exampleFormControlSelect3">İstatistik:</label>
+        <select class="form-control" id="kriter" name="kriter">
+            <option value='0' selected>Lütfen İstatistik Seçiniz</option>
+            <option value='1'>Yerleştirme İstatiği</option>
+            <option value='2' >Gelir İstatiği</option>
+            <option value='3' >Taban Puan İstatiği</option>
+        </select>
+        </div> {% endcomment %}
+        
+        <button type="submit" class="btn">Sonuçları Al</button>
+    </form>
+</div>
+
+<script>
+  var row = []
+    var fakulte_list = []
+    
+    user = "{{user}}"
+    university = "{{university}}"
+      $.getJSON("/static/json/data_2021.json", function(json) {
+          var bolum = "<option value='0' selected>Lütfen Bölüm Seçiniz</option>";
+          var burs = "<option value='0' selected>Lütfen Burs Seçiniz</option>";
+          var fakulte = "<option value='0' selected>Lütfen Fakülte Seçiniz</option>";
+          // console.log(json)
+          json.forEach((item) => {
+            row.push(item)
+            // console.log(item[2])
+            // console.log(user)
+            // console.log(university)
+            if(item[2] == university){
+              console.log(item[2])
+              // console.log(item[0])
+              // console.log(item[0].split('('))
+              // console.log(item[0].split('(')[0])
+              //var bolum_split = item[0].split('(')[0]
+              var fakulte_item = item[1]
+              if(!fakulte_list.includes(fakulte_item)){
+                fakulte += `<option value="${fakulte_item}">${fakulte_item}</option>`;
+                fakulte_list.push(fakulte_item);
+              }
+            }
+          });
+          $(`#fakulte`).html(fakulte);
+          //$(`#burs`).html(burs);
+      });
+    //   console.log("burs_list: ",burs_list)
+    var bölüm_list = []
+    var bolum = ""
+    $('#fakulte').on('change', function() {
+      selected_fakulte = this.value.replaceAll('"', "");
+      selected_fakulte = selected_fakulte
+      for(let i in row){
+        if (row[i][2] == university & row[i][1] == selected_fakulte & !bölüm_list.includes(row[i][0])){
+          bolum += "<option value='"+row[i][0]+"'>"+row[i][0]+"</option>";
+          bölüm_list.push(row[i][0]);
+        }
+      }
+      $(`#bolum`).html(bolum);
+    });
+    /*
+    var burs_list = []
+    var burs = ""
+    $('#bolum').on('change', function() {
+      for(let i in row){
+        if (row[i][2] == university & row[i][0] == this.value & !burs_list.includes(row[i][3])){
+          console.log(row[i])
+          burs += "<option value="+row[i][3]+">"+row[i][3]+"</option>";
+          burs_list.push(row[i][3]);
+        }
+      }
+      $(`#burs`).html(burs);
+    });*/
+
+  </script>
+{% endblock %}

@@ -1,46 +1,45 @@
 {% extends 'accounts/main.html' %}
 
 {% block content %}
-<h3 style="text-align: center;">Doluluk Oranı</h3>
+<h3 style="text-align: center;">Yeni bir Bölüm için Yerleştirme İstatistikleri</h3>
 <p style="text-align: center;">{{ request.user.university}}</p>
 <div style="display: flex;justify-content: space-around;width: 100%;">
-    <form action="{% url 'dolulukOraniForm' %}" method="POST">
+    <form action="{% url 'istatistikForm' %}" method="POST">
         {% csrf_token %}
         <!-- <div class="form-group">
         <label for="exampleFormControlInput1">Bölüm</label>
         <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Bölüm Seçiniz">
         </div> -->
         <div class="form-group">
-          <label for="exampleFormControlSelect1">Fakülte:</label>
-          <select class="form-control" id="fakulte" name="fakulte">
-          </select>
-          </div>
+        <label for="exampleFormControlSelect1">Fakülte:</label>
+        <select class="form-control" id="fakulte" name="fakulte">
+        </select>
+        </div>
         <div class="form-group">
         <label for="exampleFormControlSelect1">Bölüm:</label>
         <select class="form-control" id="bolum" name="bolum">
           <option value='0' selected>Lütfen Bölüm Seçiniz</option>
         </select>
         </div>
-        <!-- <div class="form-group">
-        <label for="exampleFormControlSelect2">Burs Seviyesi:</label>
-        <select class="form-control" id="burs">
+        <div class="form-group">
+        <label for="exampleFormControlSelect2">Kontenjan:</label>
+        <input type="number" id="kontenjan" name="kontenjan" min="1">
+        </div>
+        {% comment %} <div class="form-group">
+        <label for="exampleFormControlSelect2">Bursluluk Durumu:</label>
+        <select class="form-control" id="burs" name="burs">
         </select>
-        </div> -->
-        <!-- <div class="form-group">
-        <label for="exampleFormControlSelect2">Example multiple select</label>
-        <select multiple class="form-control" id="exampleFormControlSelect2">
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
+        </div> {% endcomment %}
+        <div class="form-group">
+        <label for="exampleFormControlSelect3">İstatistik:</label>
+        <select class="form-control" id="istatistik" name="istatistik">
+            <option value='0' selected>Lütfen İstatistik Seçiniz</option>
+            <option value='1'>Yerleştirme İstatiği</option>
+            <option value='2' >Gelir İstatiği</option>
+            <option value='3' >Taban Puan İstatiği</option>
         </select>
-        </div> -->
-        <!-- <div class="form-group">
-        <label for="exampleFormControlTextarea1">Example textarea</label>
-        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-        </div> -->
-        <!-- <input class="btn btn-primary" type="submit" value="Sonuçları al"> -->
+        </div>
+        
         <button type="submit" class="btn">Sonuçları Al</button>
     </form>
 </div>
@@ -48,7 +47,7 @@
 <script>
   var row = []
   var fakulte_list = []
-  
+  var exist_bolum = []
   user = "{{user}}"
   university = "{{university}}"
     $.getJSON("/static/json/data_2021.json", function(json) {
@@ -61,7 +60,7 @@
           // console.log(item[2])
           // console.log(user)
           // console.log(university)
-          if(item[2] == university){
+          if(true){
             //console.log(item[2])
             // console.log(item[0])
             // console.log(item[0].split('('))
@@ -73,18 +72,20 @@
               fakulte_list.push(fakulte_item);
             }
           }
+          if(item[2] == university){
+            exist_bolum.push(item[0])
+          }
         });
         $(`#fakulte`).html(fakulte);
         //$(`#burs`).html(burs);
     });
-  //   console.log("burs_list: ",burs_list)
+  
   var bölüm_list = []
   var bolum = ""
   $('#fakulte').on('change', function() {
+    //console.log("exist_bolum: ",exist_bolum)
     for(let i in row){
-      if (row[i][2] == university & row[i][1] == this.value & !bölüm_list.includes(row[i][0])){
-        console.log(row[i])
-        console.log(row[i][0])
+      if (!exist_bolum.includes(row[i][0]) & row[i][1] == this.value & !bölüm_list.includes(row[i][0])){
         bolum += "<option value='"+row[i][0]+"'>"+row[i][0]+"</option>";
         bölüm_list.push(row[i][0]);
       }
