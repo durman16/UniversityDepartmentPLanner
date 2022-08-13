@@ -19,7 +19,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 rnd = load('accounts/rnd.joblib')
-
+rnd_enroll = load('accounts/rnd_enroll.joblib')
 
 # train_set = pd.read_excel('dataframe.xlsx')
 df= pd.read_excel('accounts/veriseti.xlsx')
@@ -58,3 +58,25 @@ def predict_capacity(bolum_name, uni_name):
     y_itu_pred = numpy.round(y_itu_pred, 2)
     print(y_itu_pred)
     return (y_itu_pred)
+
+
+X_enroll = pd.concat([onehot_df, other_df], axis=1) #standardize
+X_enroll = X_enroll[(X_enroll["year"] == 2021)]
+y_enroll = X_enroll["enrollment"].values.reshape(-1,1)
+X_enroll = pd.DataFrame(X_enroll).drop(['enrollment'], axis=1)
+X_enroll = pd.DataFrame(X_enroll).drop(['year'], axis=1)
+
+
+def predict_enrollment(fakulte, burs, kapasite ):
+    filter = X_enroll.loc[(X_enroll["fakulte_"+ fakulte] == 1) & (X_enroll['burs_'+ burs]== 1)]
+    filter.loc[:, ('capacity')] = kapasite
+ 
+    predict_enroll = rnd_enroll.predict(filter)
+    result = pd.DataFrame(columns = ['bolum', 'predict'])
+    filter['predict_enroll'] = predict_enroll
+    filter = filter.sort_values(by=['predict_enroll'], ascending=False)
+    for i in filter.index:
+        for col in filter.columns.tolist():
+           if ("bolum_" in col) and filter.at[i,col] == 1:
+              result = result.append({'bolum' : col, 'predict' : filter.at[i,'predict_enroll']}, ignore_index=True)
+    return result
