@@ -11,8 +11,14 @@
         <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Bölüm Seçiniz">
         </div> -->
         <div class="form-group">
+          <label for="exampleFormControlSelect1">Fakülte:</label>
+          <select class="form-control" id="fakulte" name="fakulte">
+          </select>
+          </div>
+        <div class="form-group">
         <label for="exampleFormControlSelect1">Bölüm:</label>
         <select class="form-control" id="bolum" name="bolum">
+          <option value='0' selected>Lütfen Bölüm Seçiniz</option>
         </select>
         </div>
         <!-- <div class="form-group">
@@ -40,38 +46,51 @@
 </div>
 
 <script>
-    var bölüm_list = []
-    var burs_list = []
-      $.getJSON("/static/json/data_2021.json", function(json) {
-          var bolum = "<option value='0' selected>Lütfen Bölüm Seçiniz</option>";
-          var burs = "<option value='0' selected>Lütfen Burs Seçiniz</option>";
-          // console.log(json)
-          json.forEach((item) => {
-            // console.log(item[2])
-            user = "{{user}}"
-            university = "{{university}}"
-            // console.log(user)
-            // console.log(university)
-            if(item[2] == university){
-              console.log(item[2])
-              // console.log(item[0])
-              // console.log(item[0].split('('))
-              // console.log(item[0].split('(')[0])
-              var bolum_split = item[0].split('(')[0]
-              var bolum_split = item[0]
-              if(!bölüm_list.includes(bolum_split)){
-                  bolum += `<option value="${bolum_split}">${bolum_split}</option>`;
-                  bölüm_list.push(bolum_split);
-                }
-                if(!burs_list.includes(item[3])){
-                  burs += `<option value="${item[3]}">${item[3]}</option>`;
-                  burs_list.push(item[3]);
-                }
-              }
-          });
-          $(`#bolum`).html(bolum);
-          $(`#burs`).html(burs);
-      });
+  var row = []
+  var fakulte_list = []
+  
+  user = "{{user}}"
+  university = "{{university}}"
+    $.getJSON("/static/json/data_2021.json", function(json) {
+        var bolum = "<option value='0' selected>Lütfen Bölüm Seçiniz</option>";
+        var burs = "<option value='0' selected>Lütfen Burs Seçiniz</option>";
+        var fakulte = "<option value='0' selected>Lütfen Fakülte Seçiniz</option>";
+        // console.log(json)
+        json.forEach((item) => {
+          row.push(item)
+          // console.log(item[2])
+          // console.log(user)
+          // console.log(university)
+          if(item[2] == university){
+            //console.log(item[2])
+            // console.log(item[0])
+            // console.log(item[0].split('('))
+            // console.log(item[0].split('(')[0])
+            //var bolum_split = item[0].split('(')[0]
+            var fakulte_item = item[1]
+            if(!fakulte_list.includes(fakulte_item)){
+              fakulte += `<option value="${fakulte_item}">${fakulte_item}</option>`;
+              fakulte_list.push(fakulte_item);
+            }
+          }
+        });
+        $(`#fakulte`).html(fakulte);
+        //$(`#burs`).html(burs);
+    });
+  //   console.log("burs_list: ",burs_list)
+  var bölüm_list = []
+  var bolum = ""
+  $('#fakulte').on('change', function() {
+    for(let i in row){
+      if (row[i][2] == university & row[i][1] == this.value & !bölüm_list.includes(row[i][0])){
+        console.log(row[i])
+        console.log(row[i][0])
+        bolum += "<option value='"+row[i][0]+"'>"+row[i][0]+"</option>";
+        bölüm_list.push(row[i][0]);
+      }
+    }
+    $(`#bolum`).html(bolum);
+  });
     //   console.log("burs_list: ",burs_list)
   </script>
 {% endblock %}

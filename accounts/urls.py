@@ -15,6 +15,5 @@ urlpatterns = [
 
 
     
-    path('yeniprogramForm/', views.yeniprogramForm),
     path('demandForm/', views.demandForm, name="demandForm"),
 ]
