@@ -85,8 +85,13 @@
         <div class="form-outline mb-4">
             <input type="password" id="registerRepeatPassword" class="form-control" name="registerRepeatPassword" />
             <label class="form-label" for="registerRepeatPassword">Repeat password</label>
+          </div>
+          <!-- Ücret input -->
+          <div class="form-outline mb-4">
+            <input type="number" id="registerUcret" class="form-control" name="registerUcret" />
+            <label class="form-label" for="registerUcret">Ücret</label>
         </div>
-        
+          
         <div class="form-outline mb-4">
           <select id="registerUniversity"  class="form-select" aria-label="Select University" name="registerUniversity">
               <option value="0">Select University</option>
@@ -110,8 +115,11 @@
     $.getJSON("/static/json/data_2021.json", function(json) {
         var unis = "<option value='0' selected>Lütfen Üniversite Seçiniz</option>";
         json.forEach((item) => {
+          console.log(item)
+          if(!all_uni.includes(item[2]) & item[3] !="Ücretsiz"){
             unis += `<option value="${item[2]}">${item[2]}</option>`;
-            // all_uni.push(item[2]);
+            all_uni.push(item[2]);
+          }
         });
         $(`#registerUniversity`).html(unis);
     });

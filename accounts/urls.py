@@ -6,9 +6,15 @@ urlpatterns = [
     path('register', views.register),
     path('login/', views.login),
     path('logout/', views.logout_view),
+    path('menu', views.menu),
     path('dolulukOraniForm/', views.dolulukOraniForm, name="dolulukOraniForm"),
+    path('yeniBolumForm/', views.yeniBolumForm, name="yeniBolumForm"),
+    path('istatistikForm/', views.istatistikForm, name="istatistikForm"),
+    path('yerlestirmeForm/', views.yerlestirmeForm, name="yerlestirmeForm"),
+    path('kontenjanForm/', views.kontenjanForm, name="kontenjanForm"),
+
+
+    
     path('yeniprogramForm/', views.yeniprogramForm),
     path('demandForm/', views.demandForm, name="demandForm"),
-    path('resultOgrenimUcreti', views.resultOgrenimUcreti),
-    path('menu', views.menu),
 ]

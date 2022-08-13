@@ -1,50 +1,56 @@
 {% extends 'accounts/main.html' %}
 
 {% block content %}
-<h3 style="text-align: center;">Doluluk Oranı</h3>
+<h3 style="text-align: center;">Bölümlerin Gelecek Yıl Yerleştirme Tahminleri</h3>
 <p style="text-align: center;">{{ request.user.university}}</p>
 <div style="display: flex;justify-content: space-around;width: 100%;">
-    <form action="{% url 'dolulukOraniForm' %}" method="POST">
+    <form action="{% url 'yerlestirmeForm' %}" method="POST">
         {% csrf_token %}
         <!-- <div class="form-group">
         <label for="exampleFormControlInput1">Bölüm</label>
         <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Bölüm Seçiniz">
         </div> -->
         <div class="form-group">
-        <label for="exampleFormControlSelect1">Bölüm:</label>
+        <label for="exampleFormControlSelect1">Fakülte:</label>
+        <select class="form-control" id="fakulte" name="fakulte">
+        </select>
+        </div>
+        <div class="form-group">
+        <label for="exampleFormControlSelect3">Bölüm:</label>
         <select class="form-control" id="bolum" name="bolum">
         </select>
         </div>
-        <!-- <div class="form-group">
-        <label for="exampleFormControlSelect2">Burs Seviyesi:</label>
-        <select class="form-control" id="burs">
+        {% comment %} <div class="form-group">
+        <label for="exampleFormControlSelect2">Kontenjan:</label>
+        <input type="number" id="kontenjan" name="kontenjan" min="1">
+        </div> {% endcomment %}
+        <div class="form-group">
+        <label for="exampleFormControlSelect2">Bursluluk Durumu:</label>
+        <select class="form-control" id="burs" name="burs">
         </select>
-        </div> -->
-        <!-- <div class="form-group">
-        <label for="exampleFormControlSelect2">Example multiple select</label>
-        <select multiple class="form-control" id="exampleFormControlSelect2">
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
+        </div>
+        {% comment %} <div class="form-group">
+        <label for="exampleFormControlSelect3">İstatistik:</label>
+        <select class="form-control" id="kriter" name="kriter">
+            <option value='0' selected>Lütfen İstatistik Seçiniz</option>
+            <option value='1'>Yerleştirme İstatiği</option>
+            <option value='2' >Gelir İstatiği</option>
+            <option value='3' >Taban Puan İstatiği</option>
         </select>
-        </div> -->
-        <!-- <div class="form-group">
-        <label for="exampleFormControlTextarea1">Example textarea</label>
-        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-        </div> -->
-        <!-- <input class="btn btn-primary" type="submit" value="Sonuçları al"> -->
+        </div> {% endcomment %}
+        
         <button type="submit" class="btn">Sonuçları Al</button>
     </form>
 </div>
 
 <script>
+    var fakulte_list = []
     var bölüm_list = []
     var burs_list = []
       $.getJSON("/static/json/data_2021.json", function(json) {
           var bolum = "<option value='0' selected>Lütfen Bölüm Seçiniz</option>";
           var burs = "<option value='0' selected>Lütfen Burs Seçiniz</option>";
+          var fakulte = "<option value='0' selected>Lütfen Fakülte Seçiniz</option>";
           // console.log(json)
           json.forEach((item) => {
             // console.log(item[2])
@@ -59,6 +65,11 @@
               // console.log(item[0].split('(')[0])
               var bolum_split = item[0].split('(')[0]
               var bolum_split = item[0]
+              var fakulte_item = item[1]
+              if(!fakulte_list.includes(fakulte_item)){
+                fakulte += `<option value="${fakulte_item}">${fakulte_item}</option>`;
+                fakulte_list.push(fakulte_item);
+            }
               if(!bölüm_list.includes(bolum_split)){
                   bolum += `<option value="${bolum_split}">${bolum_split}</option>`;
                   bölüm_list.push(bolum_split);
@@ -69,6 +80,7 @@
                 }
               }
           });
+          $(`#fakulte`).html(fakulte);
           $(`#bolum`).html(bolum);
           $(`#burs`).html(burs);
       });
