@@ -1,18 +1,4 @@
-# from sklearn.model_selection import train_test_split, KFold, cross_val_score, cross_val_predict, StratifiedKFold, GridSearchCV
-# from numpy import mean, absolute, sqrt
-# from sklearn.ensemble import RandomForestRegressor
 import pandas as pd
-# from sklearn.metrics import mean_absolute_error, mean_squared_error, accuracy_score
-# from matplotlib import pyplot
-# import numpy as np
-# import seaborn as sns
-# from sklearn.svm import SVR
-# import matplotlib.pyplot as plt
-# from sklearn import metrics, model_selection
-# from sklearn.metrics import classification_report, confusion_matrix, fbeta_score, make_scorer, SCORERS
-# from sklearn.preprocessing import StandardScaler, Normalizer, MinMaxScaler
-# from sklearn.metrics import mean_squared_error
-# from sklearn.preprocessing import OneHotEncoder
 from joblib import load
 import numpy
 import warnings
@@ -43,7 +29,7 @@ y = X["Oran"].values.reshape(-1,1)
 X = pd.DataFrame(X).drop(['Oran'], axis=1)
 X = pd.DataFrame(X).drop(['year'], axis=1)
 
-def predict_capacity(bolum_name, uni_name):
+def predict_dolulukOrani(bolum_name, uni_name):
     bolum_name = bolum_name.replace('%','')
     print(bolum_name)
     print(uni_name)
@@ -59,13 +45,12 @@ def predict_capacity(bolum_name, uni_name):
     print(y_itu_pred)
     return (y_itu_pred)
 
-
-X_enroll = pd.concat([onehot_df, other_df], axis=1) #standardize
+other_enroll = df_year.iloc[:,6:]
+X_enroll = pd.concat([onehot_df, other_enroll], axis=1) #standardize
 X_enroll = X_enroll[(X_enroll["year"] == 2021)]
 y_enroll = X_enroll["enrollment"].values.reshape(-1,1)
 X_enroll = pd.DataFrame(X_enroll).drop(['enrollment'], axis=1)
 X_enroll = pd.DataFrame(X_enroll).drop(['year'], axis=1)
-
 
 def predict_enrollment(fakulte, burs, kapasite ):
     filter = X_enroll.loc[(X_enroll["fakulte_"+ fakulte] == 1) & (X_enroll['burs_'+ burs]== 1)]

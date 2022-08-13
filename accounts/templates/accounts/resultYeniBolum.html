@@ -1,0 +1,58 @@
+{% extends 'accounts/main.html' %}
+
+{% block content %}
+
+<style>
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+    
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+    
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+    </style>
+
+<h2>Doluluk oranı tahminleri</h2>
+<p>{{ request.user.university}}</p>
+<table id="sonuc">
+  <tr>
+    <th>Fakülte</th>
+    <th>Bölüm</th>
+    <th>Burs</th>
+    <th>{{tahmin}}</th>
+  </tr>
+  {% comment %} {% for bolum in bolums %}
+  <tr>
+    <td>{{fakulte}}</td>
+    <td>{{bolum}}</td>
+    <td>{{burs}}</td>
+    <td>{{result}}</td>
+  </tr>
+  {% endfor %} {% endcomment %}
+</table>
+<script>
+var fakulte = "{{fakulte}}";
+var bolums = '{{bolums}}'.replace('[','').replace(']','').split(',');
+var burs = '{{burs}}';
+var results = '{{results}}'.replace('[','').replace(']','').split(',');
+var x ="", i;
+for (i=0; i<bolums.length; i++) {
+    x += "<tr>";
+        x += "<td>" + fakulte + "</td>";
+        x += "<td>" + bolums[i] + "</td>";
+        x += "<td>" + burs + "</td>";
+        x += "<td>" + results[i] + "</td>";
+  x += "</tr>";
+}
+document.getElementById("sonuc").innerHTML += x;
+</script>
+
+{% endblock %}

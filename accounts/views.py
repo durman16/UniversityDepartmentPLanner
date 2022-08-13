@@ -6,7 +6,7 @@ from django.contrib.auth import login as auth_login
 from .models import Account
 import json
 import pickle
-# from .predict import predict_capacity
+from .predict import predict_dolulukOrani, predict_enrollment
 # from .demand import predict_demand
 
 
@@ -77,6 +77,52 @@ def menu(request):
             return render(request, 'accounts/login.html', {})
     return render(request, 'accounts/menu.html')
 
+def yeniBolumForm(request):
+    user = request.user
+    university = request.user.university
+    if request.method == 'POST':
+        fakulte = request.POST["fakulte"]
+        kontenjan = request.POST["kontenjan"]
+        burs = request.POST["burs"]
+        kriter = request.POST["kriter"]
+        top_n = request.POST["top-n"]
+        # print("fakulte: ",fakulte)
+        # print("kontenjan: ",kontenjan)
+        # print("kriter: ",kriter)
+        # print("top_n: ",top_n)
+        fakulte = fakulte.replace('%', '')
+        burs = burs.replace('%', '')
+        if kriter == "1":
+            tahmin = "Yerleştirme"
+            result = predict_enrollment(fakulte, burs, kontenjan)
+            result = result.groupby(['bolum']).mean().sort_values(by=['predict'], ascending=False)
+            result = result.iloc[:int(top_n)]
+            bolums = []
+            results = []
+            for i, row in result.iterrows():
+                results.append(round(row[0]))
+                bolums.append(row.name.replace('bolum_', ''))
+            # print(bolums)
+            # print(results)
+            return render(request, 'accounts/resultYeniBolum.html', {"user":user, "fakulte": fakulte, "burs":burs, "tahmin":tahmin, "results": results, "bolums": bolums})
+        if kriter == "2":
+            tahmin = "Gelir"
+            result = predict_enrollment(fakulte, burs, kontenjan)
+            result = result.groupby(['bolum']).mean().sort_values(by=['predict'], ascending=False)
+            result = result.iloc[:int(top_n)]
+            bolums = []
+            results = []
+            try: ucret = request.user.ucret
+            except: ucret = 0
+            for i, row in result.iterrows():
+                results.append(round(row[0])*request.user.ucret)
+                bolums.append(row.name.replace('bolum_', ''))
+            return render(request, 'accounts/resultYeniBolum.html', {"user":user, "fakulte": fakulte, "burs":burs, "tahmin":tahmin, "results": results, "bolums": bolums})
+        # return render(request, 'accounts/resultYeniBolum.html', {'bolum':bolum, 'universite':universite, 'result':result})
+    print("GET")
+    return render(request, 'accounts/yeniBolumForm.html', {"user":user, "university": university})
+
+
 def dolulukOraniForm(request):
     user = request.user
     university = request.user.university
@@ -91,30 +137,14 @@ def dolulukOraniForm(request):
         # print(data1)
         data1_dict = [x for x in data1 if x[0] == bolum and x[2] == universite]
         print(data1_dict)
-        try: result = predict_capacity(bolum, universite)
+        try:
+            result = predict_capacity(bolum, universite)
+            result = int(100*result)
         except: result = "Bulunamadı"
         
-        result = int(100*result)
         return render(request, 'accounts/resultDolulukOrani.html', {'bolum':bolum, 'fakulte':fakulte, 'universite':universite, 'result':result})
     print("GET")
     return render(request, 'accounts/dolulukOraniForm.html', {"user":user, "university": university})
-
-def yeniBolumForm(request):
-    user = request.user
-    university = request.user.university
-    if request.method == 'POST':
-        fakulte = request.POST["fakulte"]
-        kontenjan = request.POST["kontenjan"]
-        kriter = request.POST["kriter"]
-        top_n = request.POST["top-n"]
-        print("fakulte: ",fakulte)
-        print("kontenjan: ",kontenjan)
-        print("kriter: ",kriter)
-        print("top_n: ",top_n)
-        # return render(request, 'accounts/resultYeniBolum.html', {'bolum':bolum, 'universite':universite, 'result':result})
-    print("GET")
-    return render(request, 'accounts/yeniBolumForm.html', {"user":user, "university": university})
-
 
 def istatistikForm(request):
     user = request.user
