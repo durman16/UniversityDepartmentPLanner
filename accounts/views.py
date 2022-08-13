@@ -93,6 +93,8 @@ def dolulukOraniForm(request):
         print(data1_dict)
         try: result = predict_capacity(bolum, universite)
         except: result = "Bulunamadı"
+        
+        result = int(100*result)
         return render(request, 'accounts/resultDolulukOrani.html', {'bolum':bolum, 'fakulte':fakulte, 'universite':universite, 'result':result})
     print("GET")
     return render(request, 'accounts/dolulukOraniForm.html', {"user":user, "university": university})
