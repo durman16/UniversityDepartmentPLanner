@@ -19,6 +19,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 rnd = load('accounts/rnd.joblib')
+rnd_point = load('accounts/rnd_point.joblib')
 rnd_enroll = load('accounts/rnd_enroll.joblib')
 
 # train_set = pd.read_excel('dataframe.xlsx')
@@ -59,8 +60,8 @@ def predict_capacity(bolum_name, uni_name):
     print(y_itu_pred)
     return (y_itu_pred)
 
-
-X_enroll = pd.concat([onehot_df, other_df], axis=1) #standardize
+other_enroll = df_year.iloc[:,6:]
+X_enroll = pd.concat([onehot_df, other_enroll], axis=1) #standardize
 X_enroll = X_enroll[(X_enroll["year"] == 2021)]
 y_enroll = X_enroll["enrollment"].values.reshape(-1,1)
 X_enroll = pd.DataFrame(X_enroll).drop(['enrollment'], axis=1)
@@ -79,4 +80,33 @@ def predict_enrollment(fakulte, burs, kapasite ):
         for col in filter.columns.tolist():
            if ("bolum_" in col) and filter.at[i,col] == 1:
               result = result.append({'bolum' : col, 'predict' : filter.at[i,'predict_enroll']}, ignore_index=True)
+    return result
+
+
+point_other = df_year.iloc[:,6:]
+# other_df = pd.DataFrame(other_df).drop(['year'], axis=1)
+# other_df = pd.DataFrame(other_df).drop(['enrollment'], axis=1)
+# other_df = pd.DataFrame(other_df).drop(['capacity'], axis=1)
+X_pred = pd.concat([onehot_df, point_other], axis=1) #standardize
+# ehe = X_pred.loc[(X_pred["bolum_İç Mimarlık ve Çevre Tasarımı (50 İndirimli)"] == 1) & (X_pred['universite_İSTANBUL SABAHATTİN ZAİM ÜNİVERSİTESİ']== 1)]
+X_pred = X_pred[(X_pred["year"] == 2021)]
+y_predict = X_pred["score_last"].values.reshape(-1,1)
+# print(np.array(y_pre).index(15392))
+# print(other_df.dtypes)
+# other_df[other_df.columns] = other_df[other_df.columns].apply(pd.to_numeric, errors='ignore')
+X_pred = pd.DataFrame(X_pred).drop(['score_last'], axis=1)
+X_pred = pd.DataFrame(X_pred).drop(['year'], axis=1)
+
+def predict_point(fakulte, burs, kapasite ):
+    # bolum = X_pred.loc[(X_pred["bolum_İç Mimarlık ve Çevre Tasarımı (50 İndirimli)"] == 1) & (X_pred['universite_İSTANBUL SABAHATTİN ZAİM ÜNİVERSİTESİ']== 1)]
+    filter = X_pred.loc[(X_pred["fakulte_"+ fakulte] == 1)  &(X_pred['burs_'+ burs]== 1)]
+    filter.loc[:, ('capacity')] = kapasite
+    predict_point = rnd_point.predict(filter)
+    result = pd.DataFrame(columns = ['bolum', 'predict'])
+    filter['predict_point'] = predict_point
+    filter = filter.sort_values(by=['predict_point'], ascending=False)
+    for i in filter.index:
+        for col in filter.columns.tolist():
+           if ("bolum_" in col) and filter.at[i,col] == 1:
+              result = result.append({'bolum' : col, 'predict' : filter.at[i,'predict_point']}, ignore_index=True)
     return result
