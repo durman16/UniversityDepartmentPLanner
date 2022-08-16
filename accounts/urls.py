@@ -13,7 +13,4 @@ urlpatterns = [
     path('yerlestirmeForm/', views.yerlestirmeForm, name="yerlestirmeForm"),
     path('kontenjanForm/', views.kontenjanForm, name="kontenjanForm"),
 
-
-    
-    path('demandForm/', views.demandForm, name="demandForm"),
 ]

@@ -1,0 +1,41 @@
+{% extends 'accounts/main.html' %}
+
+{% block content %}
+
+<style>
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+    
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+    
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+    </style>
+
+<h2>Bölümlerin Gelecek Yıl Yerleştirme Tahminleri</h2>
+
+
+<table>
+  <tr>
+    <th>Bölüm</th>
+    <th>Fakülte</th>
+    <th>Üniversite</th>
+    <th>Yerleşen Öğrenci Sayısı</th>
+  </tr>
+  <tr>
+    <td>{{bolum}}</td>
+    <td>{{fakulte}}</td>
+    <td>{{university}}</td>
+    <td>{{result}}</td>
+  </tr>
+</table>
+
+{% endblock %}
